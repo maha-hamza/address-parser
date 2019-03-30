@@ -18,6 +18,11 @@ public class AddressParserService {
             throw new NullCheckException();
         }
 
+        return performParsing(address);
+    }
+
+    private Address performParsing(String address) {
+
         var add = hasSpecialKeyWords(address);
         if (add != null) {
             return add;
