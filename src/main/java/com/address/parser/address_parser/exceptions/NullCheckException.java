@@ -8,6 +8,6 @@ public class NullCheckException extends RuntimeException {
 
 
     public NullCheckException() {
-        super(String.format("Address Can't be null or empty"));
+        super("Address Can't be null or empty");
     }
 }
