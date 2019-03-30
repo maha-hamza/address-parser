@@ -341,6 +341,6 @@ public class AddressParserTest extends ITCommons {
         var response = objectMapper.readValue(content, ParserResponse.class);
         var parsedAddress = objectMapper.readValue(objectMapper.writeValueAsString(response.getAddress()), Address.class);
         assertNotNull(parsedAddress);
-        assertEquals(parsedAddress, address);
+        assertEquals(address, parsedAddress);
     }
 }

@@ -1,5 +1,6 @@
 package com.address.parser.address_parser;
 
+import com.address.parser.address_parser.exceptions.NullCheckException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,11 +9,15 @@ import java.util.stream.IntStream;
 @Service
 public class AddressParserService {
 
-    public static final String SPECIAL_CHARACTERS_RGX = "[;\\/:,\\/.*?\"\"<>|&']";
-    public static final String ALPHABETIC_AND_SPECIAL_CHAR_RGX = "^[a-zA-Z]\\p{L}*$";
-    public static final String ALPHANUMERIC_AND_SPECIAL_CHAR_RGX = "^([A-Za-z0-9\\u00C0-\\u00D6\\u00D8-\\u00f6\\u00f8-\\u00ff\\s]*)$";
+    private static final String SPECIAL_PUNCT_RGX = "[;\\/:,\\/.*?\"\"<>|&']";
+    private static final String ALPHABETIC_AND_SPECIAL_CHAR_RGX = "^[a-zA-Z]\\p{L}*$";
+    private static final String ALPHANUMERIC_AND_SPECIAL_CHAR_RGX = "^([A-Za-z0-9\\u00C0-\\u00D6\\u00D8-\\u00f6\\u00f8-\\u00ff\\s]*)$";
 
     public Address parseAddress(String address) {
+        if (address == null || address.isBlank()) {
+            throw new NullCheckException();
+        }
+
         var add = hasSpecialKeyWords(address);
         if (add != null) {
             return add;
@@ -21,7 +26,7 @@ public class AddressParserService {
         var street = "";
         var houseNumber = "";
 
-        var addressTokens = address.replaceAll(SPECIAL_CHARACTERS_RGX, "").split("\\s");
+        var addressTokens = address.replaceAll(SPECIAL_PUNCT_RGX, "").split("\\s");
 
         for (var token : addressTokens)
             if (isAlphabetic(token)) {
